@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="false.png">resources/false.png</file>
+        <file alias="true.png">resources/true.png</file>
+    </qresource>
+</RCC>

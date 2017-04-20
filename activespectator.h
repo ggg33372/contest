@@ -1,26 +1,23 @@
 #ifndef ACTIVESPECTATOR_H
 #define ACTIVESPECTATOR_H
 
-#include <artist.h>
+#include <QList>
+#include "spectator.h"
 
-#define N 2
-
-class ActiveSpectator
+class ActiveSpectator: Spectator
 {
 public:
-    ActiveSpectator();
+    ActiveSpectator(const QList<double> &prob = QList<double>());
+    bool setProbabilities(const QList<double> &prob);
+    const QList<double> &probabilies() const;
+    static const QList<ActiveSpectator*> &spectatorList();
 
-    bool vote(Artist *s);
-
-    static bool setProbability(float prob[][NUM_STARS]);
-
-protected:
-    bool setProbability(float prob[NUM_STARS]);
+    // Spectator interface
+    int vote() const;
 
 private:
-    float p[NUM_STARS];
+    QList<double> prob_;
+    static QList<ActiveSpectator*> spectators;
 };
-
-extern ActiveSpectator spectators[N];
 
 #endif // ACTIVESPECTATOR_H

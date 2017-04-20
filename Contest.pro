@@ -16,11 +16,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     activespectator.cpp \
     artist.cpp \
-    wizardpages.cpp
+    wizardpages.cpp \
+    spectator.cpp \
+    corruptedspectator.cpp
 
 HEADERS  += mainwindow.h \
     activespectator.h \
     artist.h \
-    wizardpages.h
+    wizardpages.h \
+    spectator.h \
+    corruptedspectator.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resources.qrc

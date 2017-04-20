@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "activespectator.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,8 @@ protected slots:
 
 private:
     Ui::MainWindow *ui;
+    QList<ActiveSpectator> activeSpectators;
+
 };
 
 #endif // MAINWINDOW_H

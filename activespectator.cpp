@@ -1,40 +1,55 @@
 #include <QDebug>
 #include "activespectator.h"
 
-ActiveSpectator spectators[N];
+QList<ActiveSpectator*> ActiveSpectator::spectators;
 
-ActiveSpectator::ActiveSpectator()
+ActiveSpectator::ActiveSpectator(const QList<double> &prob)
 {
-
+    if (!prob.isEmpty())
+        setProbabilities(prob);
+    spectators.append(this);
 }
 
-bool ActiveSpectator::vote(Artist *s)
+const QList<ActiveSpectator *> &ActiveSpectator::spectatorList()
 {
-
+    return spectators;
 }
 
-bool ActiveSpectator::setProbability(float prob[])
+int ActiveSpectator::vote() const
 {
-    float sum(0);
+    double sum;
+    double roll = ((double)qrand())/RAND_MAX;
+    int index = 0;
 
-    for (int j=0; j<NUM_STARS; ++j)
+    for (QList<double>::ConstIterator it=prob_.constBegin(); it!=prob_.constEnd(); ++it, ++index)
     {
-        qDebug() << "prob[" << j << "]=" << prob[j];
-        sum += p[j] = prob[j];
+        sum += *it;
+        if (roll<sum)
+            return index;
     }
+
+    Q_ASSERT(false);
+
+    return -1;
+}
+
+bool ActiveSpectator::setProbabilities(const QList<double> &prob)
+{
+    double sum(0);
+
+    for (QList<double>::ConstIterator it=prob.constBegin(); it!=prob.constEnd(); ++it)
+        sum += *it;
+
     qDebug() << "sum=" << sum;
 
     if (1-sum)
         return false;
+
+    prob_ = prob;
+    return true;
 }
 
-bool ActiveSpectator::setProbability(float prob[][NUM_STARS])
+const QList<double> &ActiveSpectator::probabilies() const
 {
-    for (int i=0; i<N; ++i)
-    {
-        qDebug() << "i=" << i;
-        if (!spectators[i].setProbability(prob[i]))
-            return false;
-    }
-    return true;
+    return prob_;
 }

@@ -4,25 +4,34 @@
 #include <QWizard>
 #include <QWizardPage>
 #include <QTreeWidget>
+#include <QList>
 
-class WizardPages : public QObject
+struct ActorData
+{
+    double actor1;
+    double actor2;
+    double actor3;
+};
+
+class WizardPages : public QWizard
 {
     Q_OBJECT
+
+    enum Pages
+    {
+        IdStartupPage = 1000,
+        IdActiveSpectatorPage,
+        IdCorruptedSpectatorPage,
+        IdActorsPage
+    };
+
 public:
     explicit WizardPages(QWidget *parent = 0);
-    ~WizardPages();
 
-    QWizardPage *createStartPage();
-    QWizardPage *createActivePage();
-    QWizardPage *createCorruptedPage();
-
-    int exec();
-
-private:
-    QWizardPage *startupPage;
-    QWizardPage *activePage;
-    QWizardPage *corruptedPage;
-    QWizard     *wizard;
+    double winProfit() const;
+    QList<ActorData> probabilities() const;
+    QList<ActorData> prices() const;
+    ActorData        earning() const;
 };
 
 class StartupPage: public QWizardPage
@@ -39,6 +48,7 @@ class ActiveSpectatorPage: public QWizardPage
 
 public:
     ActiveSpectatorPage(QWidget *parent = NULL);
+    QList<ActorData> probabilities() const;
 
     // QWizardPage interface
     void initializePage();
@@ -50,6 +60,8 @@ protected slots:
 
 private:
    QTreeWidget *treeWidget;
+   QIcon iconTrue;
+   QIcon iconFalse;
 };
 
 class CorruptedSpectatorPage: public QWizardPage
@@ -58,10 +70,10 @@ class CorruptedSpectatorPage: public QWizardPage
 
 public:
     CorruptedSpectatorPage(QWidget *parent = NULL);
+    QList<ActorData> prices() const;
 
    // QWizardPage interface
    void initializePage();
-   bool isComplete() const;
 
 protected slots:
     void onItemClicked(QTreeWidgetItem *item, int column);
@@ -69,6 +81,17 @@ protected slots:
 
 private:
    QTreeWidget *treeWidget;
+   QIcon iconTrue;
+   QIcon iconFalse;
+};
+
+class ActorsPage: public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    ActorsPage(QWidget *parent = NULL);
+    ActorData        earning() const;
 };
 
 #endif // WIZARDPAGES_H
